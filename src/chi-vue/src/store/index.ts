@@ -1,3 +1,4 @@
+import { exampleTableBody } from '@/views/DataTable/ClientSide/fixtures';
 import { Module, VuexModule, MutationAction } from 'vuex-module-decorators';
 
 export const STORE_KEY = '$_chi-vue';
@@ -9,6 +10,7 @@ export const STORE_KEY = '$_chi-vue';
 export default class ChiVue extends VuexModule {
   filterConfig: object = {};
   filterConfigLive: object = {};
+  tableBody: any = {};
 
   @MutationAction
   async updateFilterConfig(payload: any) {
@@ -19,6 +21,20 @@ export default class ChiVue extends VuexModule {
     } catch (error) {
       return {
         filterConfig: {},
+      };
+    }
+  }
+
+  @MutationAction({ mutate: ['tableBody'] })
+  async loadMockApi() {
+    try {
+      const apiClientsData = exampleTableBody;
+      return {
+        tableBody: apiClientsData,
+      };
+    } catch (error) {
+      return {
+        tableBody: {},
       };
     }
   }

@@ -2,7 +2,7 @@
   <div id="tadataTableClientView">
     <h2>Data Table Client Side</h2>
     <ChiDataTable
-      :data="table"
+      :data="tableDataTest"
       :config="config"
       @chiSelectedRowsChange="e => this.rowSelect(e)"
       @chiPageChange="e => this.pageChange(e)"
@@ -90,6 +90,9 @@ import DataTableFilters from '../../../components/data-table-filters/DataTableFi
 import { DataTableRow } from '../../../constants/types';
 import ColumnCustomization from '../../../components/column-customization/ColumnCustomization';
 import { exampleConfig, exampleToolbar, exampleTableHead, exampleTableBody } from './fixtures';
+import { STORE_KEY } from '../../../store';
+import { getModule } from 'vuex-module-decorators';
+import store from '../../../store';
 
 const FAKE_API_RESPONSE_DELAY = 5000;
 
@@ -142,6 +145,28 @@ const FAKE_API_RESPONSE_DELAY = 5000;
   },
 })
 export default class DataTableView extends Vue {
+  storeModule: any;
+
+  async created() {
+    const isModuleRegistered = Object.keys(this.$store.state).includes(STORE_KEY);
+
+    if (!isModuleRegistered) {
+      this.$store.registerModule(STORE_KEY, store);
+    }
+
+    if (!this.storeModule && this.$store) {
+      this.storeModule = getModule(store, this.$store);
+    }
+    await this.storeModule.loadMockApi();
+  }
+
+  get tableDataTest() {
+    return {
+      head: exampleTableHead,
+      body: this.storeModule.tableBody,
+    };
+  }
+
   mounted() {
     setTimeout(() => {
       // This example is present to demonstrate asynchronous updating of the data

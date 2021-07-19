@@ -11,6 +11,7 @@ const store = new Vuex.Store({
   modules: {
     ChiVue,
   },
+  strict: true,
 });
 
 new Vue({

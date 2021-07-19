@@ -703,6 +703,7 @@ export default class DataTable extends Vue {
     this._expandable =
       this.$props.config.reserveExpansionSlot ||
       !!this.data.body.find((row: { nestedContent: any }) => row.nestedContent);
+    debugger;
     this.data.body.forEach(row => {
       this._serializedDataBody.push(serializeRow(row, rowNumber, null));
       rowNumber++;
